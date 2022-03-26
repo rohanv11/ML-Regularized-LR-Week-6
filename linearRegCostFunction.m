@@ -19,11 +19,38 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+% X: m * n + 1
+% y: m * 1
+% theta: (n + 1) by 1                      
+% hypothesis1: X * theta = m * 1
+
+hypothesis1 = X * theta
+% hypothesis1: m * 1
+
+regularization_term = lambda / (2 * m) * sum(theta(2:size(theta, 1), 1) .^ 2);
 
 
 
+J = 1 / (2 * m) * sum((hypothesis1 - y) .^ 2)  +  regularization_term;
+
+% hypothesis1 - y: m by 1
+% X' = (n + 1) by m
+% X' * (hypothesis1 - y): (n + 1) by 1
+
+% X: m by (n + 1)
+% (hypothesis1 - y)': 1 by m
+% (hypothesis1 - y)' * X: 1 by (n + 1)
+
+grad(1, 1) = (1 / m) * ((hypothesis1 - y)' * X )(1,1);
+
+temp = ((hypothesis1 - y)' * X )
+temp = reshape(temp, size(temp, 2) , size(temp, 1))
 
 
+grad(2:end, 1) = (1 / m) * temp(2:end, 1) +  (lambda / m) * theta(2:end, 1);
+
+%(X' * (hypothesis1 - y))(2:end, 1): n by 1
+%theta(2:end, 1): n by 1 
 
 
 
@@ -32,6 +59,6 @@ grad = zeros(size(theta));
 
 % =========================================================================
 
-grad = grad(:);
+%grad = grad(:);
 
 end
